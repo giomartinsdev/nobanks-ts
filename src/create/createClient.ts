@@ -1,4 +1,5 @@
 import { pool } from "../utils/setDb";
+import { execQuery } from "../utils/execQuery";
 
 interface Client {
   name: string;
@@ -8,25 +9,17 @@ interface Client {
   email: string;
 }
 
-const createClient = (client: Client) => {
-  const insert = `insert into clients (name, document, password, cellphone, email) values ($1, $2, $3, $4, $5)`;
-  pool.query(
-    insert,
-    [
-      client.name,
-      client.document,
-      client.password,
-      client.cellphone,
-      client.email,
-    ],
-    (err: any) => {
-      if (err) {
-        console.error("Erro ao criar cliente", err);
-      } else {
-        console.log("Cliente criado com sucesso!");
-      }
-    }
-  );
+export const createClient = async (client: Client) => {
+  try {
+    await execQuery({
+      query:
+        "INSERT INTO clients (name, document, password, cellphone, email) values ($1, $2, $3, $4, $5)",
+      values: [client.name, client.document, client.password, client.cellphone, client.email],
+    });
+    
+    console.log("Cliente criado com sucesso!");
+  } catch (err) {
+    console.error("Erro ao criar cliente", err);
+    throw err;
+  }
 };
-
-export { createClient };

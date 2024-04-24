@@ -1,17 +1,18 @@
-import { pool } from "./setDb";
+import { execQuery } from "./execQuery";
 
 interface Account {
   id: number;
 }
-export const getAccountsById = async (account: Account) => { 
+
+export const getAccountsByClientId = async (account: Account) => {
   try {
-    const query = "SELECT * FROM account WHERE client_id = $1";
-    const values = [account.id];
-    const result = await pool.query(query, values);
-    
-    return result.rows;
+    const result = await execQuery({
+      query: "SELECT * FROM accounts WHERE client_id = $1",
+      values: [account.id],
+    });
+    return result;
   } catch (error) {
     console.error("Error retrieving accounts by ID:", error);
     throw error;
   }
-}
+};

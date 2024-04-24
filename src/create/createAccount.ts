@@ -1,24 +1,26 @@
-import { pool } from "../utils/setDb";
+import { execQuery } from "../utils/execQuery";
 
 interface Account {
-  acc_number: string;
+  acc_number: number;
   client_id: number;
   balance: number;
 }
 
-const createAccount = (client: Account) => {
-  const insert = `insert into account (acc_number, client_id, balance) values ($1, $2, $3)`;
-  pool.query(
-    insert,
-    [client.acc_number, client.client_id, client.balance],
-    (err: any) => {
-      if (err) {
-        console.error("Erro ao criar conta", err);
-      } else {
-        console.log("Conta criada com sucesso!");
-      }
-    }
-  );
-};
+export const createAccount = async (account: Account) => {
+  try {
+    await execQuery({
+      query:
+        `insert into accounts (acc_number, client_id, balance) values ($1, $2, $3)`,
+      values: [
+        account.acc_number,
+        account.client_id,
+        account.balance,
+      ],
+    });
 
-export { createAccount };
+    console.error("Conta criada com sucesso");
+  } catch (err) {
+    console.error("Erro ao criar conta", err);
+    throw err;
+  }
+};
