@@ -13,7 +13,7 @@ class Client extends Model {
 Client.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
       defaultValue: () => Math.floor(Math.random() * 1000000),

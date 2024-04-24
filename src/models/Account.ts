@@ -11,21 +11,18 @@ class Account extends Model {
 
 Account.init(
   {
-    id: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      autoIncrement: true,
-      primaryKey: true,
-      defaultValue: () => Math.floor(Math.random() * 1000000),
-    },
-    acc_number: {
+    acc_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      primaryKey: true,
+      unique: true,
+      defaultValue: () => Math.floor(Math.random() * 1000000),
     },
     client_id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: Client, 
+        model: Client,
         key: "id",
       },
     },

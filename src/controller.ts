@@ -22,37 +22,48 @@ export const createClientController = async (req: Request, res: Response) => {
 export const createAccountController = async (req: Request, res: Response) => {
   try {
     const newAccount = await Account.create(req.body);
-    res.json(`Cliente ${newAccount.id} criado com sucesso!`);
+    res.json(`Cliente ${newAccount.client_id} criado com sucesso!`);
   } catch (err) {
     console.error("Erro ao criar conta", err);
     res.status(500).send("Erro ao criar conta");
   }
 };
-export const inactivateClientController = async (req: Request,res: Response) => {
+export const getClientController = async (req: Request, res: Response) => {
   try {
-    await inactivateClientbyId(req.body);
-    res.json(`Cliente ${req.body.id} inativado com sucesso!`);
+    const client = await Client.findByPk(req.params.id);
+    res.json(client);
   } catch (err) {
-    console.error("Erro ao inativar conta", err);
-    res.status(500).send("Erro ao criar conta");
+    console.error("Erro ao obter cliente", err);
+    res.status(500).send("Erro ao obter cliente");
   }
 };
 
-export const updateAccountOrClientController = async (req: Request, res: Response) => {
+export const updateClientController = async (req: Request, res: Response) => {
   try {
     await updateAccountOrClient(req.body);
-    res.json(`${req.body.id} atualizado com sucesso!`);
+    res.json(`Cliente ${req.body.id} atualizado com sucesso!`);
   } catch (err) {
-    console.error("Erro ao atualizar conta", err);
-    res.status(500).send("Erro ao atualizar conta");
+    console.error("Erro ao atualizar cliente", err);
+    res.status(500).send("Erro ao atualizar cliente");
   }
 };
 
-export const returnAllAccountsController = async (req: Request, res: Response) => {
+export const deleteClientController = async (req: Request, res: Response) => {
   try {
-    await getAccountsByClientId(req.body).then((accounts) => res.json(accounts));
+    await inactivateClientbyId(req.body);
+    res.json(`Cliente ${req.params.id} inativado com sucesso!`);
   } catch (err) {
-    console.error("Erro ao retornar contas", err);
-    res.status(500).send("Erro ao retornar contas");
+    console.error("Erro ao inativar cliente", err);
+    res.status(500).send("Erro ao inativar cliente");
+  }
+};
+
+export const getAccountsController = async (req: Request, res: Response) => {
+  try {
+    const accounts = await getAccountsByClientId({ id: Number(req.params.id) });
+    res.json(accounts);
+  } catch (err) {
+    console.error("Erro ao obter contas", err);
+    res.status(500).send("Erro ao obter contas");
   }
 };
