@@ -1,11 +1,12 @@
-import { getAccountsByClientId } from "./utils/returnAllAccounts";
-import { updateAccount } from "./utils/updateRow";
-import { createAccount } from "./create/createAccount";
-import { createClient } from "./create/createClient";
+import express from "express";
+import { router } from "./routes";
 
-getAccountsByClientId({ id: 71 }).then((res: any) => console.log(res));
-getAccountsByClientId({ id: 38 }).then((res: any) => console.log(res));
+const app = express();
+const port = 3000;
 
-// createClient({ name: "maria", document: "99999999999", password: "654789", cellphone: "21981978888", email: "gio@gio.com"})
+app.use(express.json());
+app.use(router);
 
-createAccount({ acc_number: 333222, client_id: 72, balance: 2781362})
+app.listen(port, () => {
+  console.log(`Servidor rodando em http://localhost:${port}`);
+});
